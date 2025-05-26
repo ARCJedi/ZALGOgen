@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Zalgo Generator Plus</title>
+  <style>
+    body {
+      font-family: monospace;
+      background: #111;
+      color: #eee;
+      padding: 2em;
+    }
+    input, button, select {
+      font-size: 1rem;
+      padding: 0.5em;
+      background: #1e1e1e;
+      color: #fff;
+      border: 1px solid #555;
+      margin-bottom: 1em;
+    }
+    label {
+      margin-right: 1em;
+    }
+    .result {
+      margin-top: 1em;
+      white-space: nowrap;
+      overflow-x: auto;
+    }
+    .zalgo {
+      margin-bottom: 1em;
+    }
+    button.copy {
+      margin-left: 1em;
+      font-size: 0.9rem;
+      background: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>💀 Zalgo Text Generator</h1>
+  <input type="text" id="textInput" placeholder="Enter your text..." size="40"><br>
+
+  <label>Chaos Level: <input type="range" id="chaosSlider" min="1" max="5" value="2"></label>
+  <label>Style: 
+    <select id="styleSelect">
+      <option value="none">None</option>
+      <option value="wide">Widened</option>
+      <option value="circle">Circled</option>
+      <option value="upside">Upside Down</option>
+      <option value="mirror">Mirrored</option>
+    </select>
+  </label>
+
+  <button onclick="generateZalgo()">Generate</button>
+  <div class="result" id="output"></div>
+
+  <script>
+    const ZALGO_UP = ['̍','̎','̄','̅','̿','̑','̆','̐','͒','͗','̇','̈','̊','͂','̓','̈́'];
+    const ZALGO_MID = ['̕','̛','̀','́','̋','̃','̓','̒','̏'];
+    const ZALGO_DOWN = ['̖','̗','̘','̙','̜','̝','̞','̟','̠','̤','̥','̦','̩','̪','̫','̬','̭','̮','̯','̰','̱','̲','̳','̹','̺','̻','̼','ͅ'];
+
+    const UPSIDE = {
+      a:'ɐ', b:'q', c:'ɔ', d:'p', e:'ǝ', f:'ɟ', g:'ƃ', h:'ɥ', i:'ᴉ', j:'ɾ', k:'ʞ', l:'ʃ',
+      m:'ɯ', n:'u', o:'o', p:'d', q:'b', r:'ɹ', s:'s', t:'ʇ', u:'n', v:'ʌ', w:'ʍ', x:'x',
+      y:'ʎ', z:'z', A:'∀', B:'𐐒', C:'Ɔ', D:'◖', E:'Ǝ', F:'Ⅎ', G:'פ', H:'H', I:'I',
+      J:'ſ', K:'⋊', L:'˥', M:'W', N:'N', O:'O', P:'Ԁ', Q:'Ό', R:'ᴚ', S:'S', T:'┴', U:'∩',
+      V:'Λ', W:'M', X:'X', Y:'⅄', Z:'Z', '.':'˙', ',':'\'', "'":',', '"':',,', '_':'‾',
+      '&':'⅋', '!':'¡', '?':'¿', '[':']', ']':'[', '(':')', ')':'(', '{':'}', '}':'{',
+      '<':'>', '>':'<'
+    };
+
+    const MIRROR = {
+      a:'ɒ', b:'d', c:'ↄ', d:'b', e:'ǝ', f:'ɟ', g:'ƃ', h:'ɥ', i:'i', j:'ɾ', k:'ʞ', l:'|',
+      m:'ɯ', n:'u', o:'o', p:'q', q:'p', r:'ɿ', s:'s', t:'ʇ', u:'n', v:'ʌ', w:'ʍ', x:'x',
+      y:'ʎ', z:'z', A:'∀', B:'Ԑ', C:'Ↄ', D:'◖', E:'Ǝ', F:'Ⅎ', G:'פ', H:'H', I:'I', J:'ſ',
+      K:'⋊', L:'˥', M:'W', N:'И', O:'O', P:'Ԁ', Q:'Ό', R:'ᴚ', S:'S', T:'⊥', U:'∩', V:'Λ',
+      W:'M', X:'X', Y:'⅄', Z:'Z'
+    };
+
+    function zalgoChar(c, chaos) {
+      let result = c;
+      for (let i = 0; i < chaos; i++) result += ZALGO_UP[Math.floor(Math.random() * ZALGO_UP.length)];
+      for (let i = 0; i < Math.floor(chaos / 2); i++) result += ZALGO_MID[Math.floor(Math.random() * ZALGO_MID.length)];
+      for (let i = 0; i < chaos; i++) result += ZALGO_DOWN[Math.floor(Math.random() * ZALGO_DOWN.length)];
+      return result;
+    }
+
+    function applyStyle(text, style) {
+      switch(style) {
+        case 'wide':
+          return text.split('').join(' ');
+        case 'circle':
+          return text.split('').map(c =>
+            c.match(/[a-z]/i) ? String.fromCharCode(c.toUpperCase().charCodeAt(0) + 9333) : c
+          ).join('');
+        case 'upside':
+          return [...text].reverse().map(c => UPSIDE[c] || c).join('');
+        case 'mirror':
+          return [...text].reverse().map(c => MIRROR[c] || c).join('');
+        default:
+          return text;
+      }
+    }
+
+    function zalgoText(text, chaos, style) {
+      const styled = applyStyle(text, style);
+      return [...styled].map(c => /\S/.test(c) ? zalgoChar(c, chaos) : c).join('');
+    }
+
+    function generateZalgo() {
+      const text = document.getElementById('textInput').value;
+      const chaos = parseInt(document.getElementById('chaosSlider').value);
+      const style = document.getElementById('styleSelect').value;
+      const output = document.getElementById('output');
+      output.innerHTML = '';
+
+      for (let i = 0; i < 3; i++) {
+        const variant = zalgoText(text, chaos + i, style);
+        const line = document.createElement('div');
+        line.className = 'zalgo';
+        line.textContent = variant;
+
+        const copyBtn = document.createElement('button');
+        copyBtn.textContent = 'Copy';
+        copyBtn.className = 'copy';
+        copyBtn.onclick = () => navigator.clipboard.writeText(variant);
+
+        line.appendChild(copyBtn);
+        output.appendChild(line);
+      }
+    }
+  </script>
+
+</body>
+</html>

@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Zalgo Generator Plus</title>
+  <title>Zalgo Text Generator</title>
   <style>
     body {
       font-family: monospace;
@@ -40,7 +40,7 @@
 <body>
 
   <h1>💀 Zalgo Text Generator</h1>
-  <input type="text" id="textInput" placeholder="Enter your text..." size="40"><br>
+  <input type="text" id="textInput" placeholder="Enter your text..." size="40" onkeypress="if(event.key==='Enter'){generateZalgo()}"><br>
 
   <label>Chaos Level: <input type="range" id="chaosSlider" min="1" max="5" value="2"></label>
   <label>Style: 
@@ -57,15 +57,15 @@
   <div class="result" id="output"></div>
 
   <script>
-    const ZALGO_UP = ['̍','̎','̄','̅','̿','̑','̆','̐','͒','͗','̇','̈','̊','͂','̓','̈́'];
-    const ZALGO_MID = ['̕','̛','̀','́','̋','̃','̓','̒','̏'];
-    const ZALGO_DOWN = ['̖','̗','̘','̙','̜','̝','̞','̟','̠','̤','̥','̦','̩','̪','̫','̬','̭','̮','̯','̰','̱','̲','̳','̹','̺','̻','̼','ͅ'];
+    const ZALGO_UP = ['\u030d','\u030e','\u0304','\u0305','\u033f','\u0311','\u0306','\u0310','\u0352','\u0357','\u0307','\u0308','\u030a','\u0342','\u0343','\u0344'];
+    const ZALGO_MID = ['\u0315','\u031b','\u0300','\u0301','\u030b','\u0303','\u0309','\u030c','\u030f'];
+    const ZALGO_DOWN = ['\u0316','\u0317','\u0318','\u0319','\u031c','\u031d','\u031e','\u031f','\u0320','\u0324','\u0325','\u0326','\u0329','\u032a','\u032b','\u032c','\u032d','\u032e','\u032f','\u0330','\u0331','\u0332','\u0333','\u0339','\u033a','\u033b','\u033c','\u0345'];
 
     const UPSIDE = {
       a:'ɐ', b:'q', c:'ɔ', d:'p', e:'ǝ', f:'ɟ', g:'ƃ', h:'ɥ', i:'ᴉ', j:'ɾ', k:'ʞ', l:'ʃ',
       m:'ɯ', n:'u', o:'o', p:'d', q:'b', r:'ɹ', s:'s', t:'ʇ', u:'n', v:'ʌ', w:'ʍ', x:'x',
-      y:'ʎ', z:'z', A:'∀', B:'𐐒', C:'Ɔ', D:'◖', E:'Ǝ', F:'Ⅎ', G:'פ', H:'H', I:'I',
-      J:'ſ', K:'⋊', L:'˥', M:'W', N:'N', O:'O', P:'Ԁ', Q:'Ό', R:'ᴚ', S:'S', T:'┴', U:'∩',
+      y:'ʎ', z:'z', A:'∀', B:'၁2', C:'Ɔ', D:'◖', E:'Ǝ', F:'Ⅎ', G:'פ', H:'H', I:'I',
+      J:'ſ', K:'⋊', L:'˥', M:'W', N:'N', O:'O', P:'Ԁ', Q:'Ό', R:'ᴚ', S:'S', T:'⊥', U:'∩',
       V:'Λ', W:'M', X:'X', Y:'⅄', Z:'Z', '.':'˙', ',':''', "'":',', '"':',,', '_':'‾',
       '&':'⅋', '!':'¡', '?':'¿', '[':']', ']':'[', '(':')', ')':'(', '{':'}', '}':'{',
       '<':'>', '>':'<'
